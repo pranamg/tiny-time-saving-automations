@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\OpenInVSCode]
+@="Open in VS Code"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\OpenInVSCode\command]
+@="cmd.exe /c code \"%V\""
