@@ -1,8 +1,7 @@
 Windows Registry Editor Version 5.00
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\Open with Firefox]
-@="Open with Firefox"
-"Icon"="firefox.exe"
+[HKEY_CLASSES_ROOT\Directory\Background\shell\SetFirefoxDownloadDir]
+@="Set as Firefox Download Directory"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\Open with Firefox\command]
-@="\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\" \"%V\""
+[HKEY_CLASSES_ROOT\Directory\Background\shell\SetFirefoxDownloadDir\command]
+@="powershell.exe -ExecutionPolicy Bypass -File \"C:\\scripts\\UpdateFirefoxDownloadPath.ps1\" \"%V\""
