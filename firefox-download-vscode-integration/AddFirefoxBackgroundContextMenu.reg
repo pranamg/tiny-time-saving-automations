@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\Open with Firefox]
+@="Open with Firefox"
+"Icon"="firefox.exe"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\Open with Firefox\command]
+@="\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\" \"%V\""
