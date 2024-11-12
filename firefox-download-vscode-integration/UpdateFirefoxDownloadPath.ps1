@@ -9,36 +9,37 @@ if (-not $newDownloadPath) {
     exit
 }
 
-# Function to update the Firefox download path in the prefs.js file
+# Function to update the Firefox download path in the user.js file
 function Update-FirefoxDownloadPath {
     param (
-        [string]$prefsFilePath,
+        [string]$userFilePath,
         [string]$newPath
     )
 
-    if (Test-Path $prefsFilePath) {
+    if (Test-Path $userFilePath) {
         # Define the preference you want to update
-        $preferenceLine = 'user_pref("browser.download.dir", "' + $downloadDirectory + '");'
+        $preferenceLine = 'user_pref("browser.download.dir", "' + $newPath + '");'
 
-        $prefsContent = Get-Content $prefsFilePath
+        $userContent = Get-Content $userFilePath
     
         # Check if the preference already exists
-        $existingLine = $prefsContent | Where-Object { $_ -like 'user_pref("browser.download.dir",*' }
+        $existingLine = $userContent | Where-Object { $_ -like 'user_pref("browser.download.dir",*' }
 
         if ($existingLine) {
             # Update the existing preference
-            $prefsContent = $prefsContent -replace [regex]::Escape($existingLine), $preferenceLine
+            $userContent = $userContent -replace [regex]::Escape($existingLine), $preferenceLine
         } else {
             # Add the new preference line
-            $prefsContent += $preferenceLine
+            $userContent += $preferenceLine
         }
 
-#        $prefsContent = $prefsContent -replace 'user_pref\("browser.download.dir", ".*"\);', "user_pref(`"browser.download.dir`", `"$newPath`");"
-
-        Set-Content -Path $prefsFilePath -Value $prefsContent -Force
+        Set-Content -Path $userFilePath -Value $userContent -Force
         Write-Output "Firefox download path updated to $newPath"
     } else {
-        Write-Output "prefs.js file not found at $prefsFilePath"
+        # Create user.js file and add the preference
+        $preferenceLine = 'user_pref("browser.download.dir", "' + $newPath + '");'
+        Set-Content -Path $userFilePath -Value $preferenceLine -Force
+        Write-Output "user.js file created and Firefox download path set to $newPath"
     }
 }
 
@@ -47,6 +48,6 @@ $firefoxProfilePath = "$env:APPDATA\Mozilla\Firefox\Profiles"
 $profileDirs = Get-ChildItem -Path $firefoxProfilePath -Directory
 
 foreach ($profileDir in $profileDirs) {
-    $prefsFilePath = Join-Path -Path $profileDir.FullName -ChildPath "prefs.js"
-    Update-FirefoxDownloadPath -prefsFilePath $prefsFilePath -newPath $newDownloadPath
+    $userFilePath = Join-Path -Path $profileDir.FullName -ChildPath "user.js"
+    Update-FirefoxDownloadPath -userFilePath $userFilePath -newPath $newDownloadPath
 }
